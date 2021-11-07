@@ -1,0 +1,66 @@
+#+TITLE: Strapi Blog Starter
+#+AUTHOR: Fikri Rahmat Nurhidayat
+#+EMAIL: fnurhidayat@binar.co.id
+
+* Pendahuluan
+
+Next.js sangat umum dipakai untuk menerapkan *Server Side Rendering*, maka dari itu, pada pembahasan kali ini kita akan mencoba membuat aplikasi simple yang bisa mengstimulasi Server Side Rendering pada next.js.
+
+Disini kita akan mencoba membuat aplikasi sederhana, yaitu /blogging website/, dimana akan ada 2 aplikasi yang terlibat dalam website tersebut, yaitu backend (Strapi) dan frontend (Next.js). Kita juga tidak akan membuat kode dari 0, namun kita akan memakai /template/ saja.
+
+* Next.js Blog Starter
+
+/Next.js blog starter/ adalah sebuah /template/ atau /boilerplate/ yang dapat kita gunakan untuk membuat /blogging website/ sederhana dengan tampilan yang sudah ciamik. Ada beberapa varian dari starter ini, namun yang akan kita gunakan adalah starter yang sudah disambungkan dengan Strapi.
+
+Strapi adalah sebuah framework yang kita pakai untuk membuat /Headless CMS/, artinya framework ini bisa kita pakai untuk mengatur data yang akan kita tampilkan untuk klien dari CMS kita. Namun di pembahasan ini kita tidak akan membahasnya secara detail, melainkan kita cukup tau saja, karena kita akan menggunakan CMS untuk aplikasi frontend kita.
+
+** Getting Started
+
+Untuk mulai membuat situs blog dengan /starter/ yang sudah disebut kan sebelumnya, kita bisa jalankan perintah ini:
+
+#+BEGIN_SRC shell
+yarn create strapi-starter my-project next-blog
+#+END_SRC
+
+Lalu perintah tersebut akan meminta /prompt/ untuk dijawab, cuma pilih ~Quickstart~ saja untuk /simplicity/. Setelah itu perintah tersebut akan membuat kode berdasarkan /template/ untuk ~strapi~ dan ~next.js~ dan akan ada server yang berjalan di port 1337, dan 3000.
+
+Dimana http://0.0.0.0:3000 adalah next server. Dan http://localhost:1337 adalah strapi server.
+
+[[./.assets/next-homepage.png]]
+
+Kalian bisa coba inspeksi sendiri code di dalam folder ~my-project/frontend~ untuk mengetahui lebih detail tentang bagaimana next.js bekerja.
+
+** Server Side Rendering
+
+Kita tidak akan membahas /kode/-nya disini, melainkan kita hanya akan melihat bagaimana next.js akan merender halaman baru berdasarkan data yang kita buat melalui Strapi.
+
+1. Buka http://localhost:1337/admin
+2. Masukkan informasi user.
+
+   [[./.assets/strapi-registration.png]]
+
+3. Setelah di-redirect ke dashboard, bukalah ~Articles~, dan tambahlah ~Article~ ke dalam tabel tersebut.
+
+   [[./.assets/strapi-dashboard.png]]
+
+4. Tambahlah article sesuai kebutuhanmu, lalu /publish/.
+
+   [[./.assets/strapi-articles.png]]
+
+5. Setelah /publish/, bukalah halaman http://0.0.0.0:3000, maka /article/ baru akan otomatis ada di dalam halaman tersebut.
+
+   [[./.assets/next-homepage-after-new-article.png]]
+
+6. Bukalah article baru tersebut.
+
+Kalau kita perhatikan di dalam log akan ada log seperti ini:
+
+#+BEGIN_EXAMPLE
+[develop:frontend] event - build page: /article/[slug]
+[develop:frontend] wait  - compiling...
+[develop:frontend] event - compiled successfully
+#+END_EXAMPLE
+
+Hal ini menandakan bahwa ~next.js~ sedang melakukan rendering terhadap konten baru di dalam website kita. Setelah di-/render/, ketika user mengakses halaman http://0.0.0.0/article/slug-dari-article-tersebut, maka konten yang sudah di-/render/ itu akan langsung disajikan ke user, dan user tidak perlu merendernya di dalam browser user, mereka tinggal menampikan saja. Inilah manifestasi dari metode /Server Side Rendering/.
+
+~next.js~ akan merender data baru dan memasukkannya ke dalam ~cache~, dan menyajikannya ke user ketika ada /request/ ke dalam halaman tersebut.
